@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Blocks World</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="modal.css">
+</head>
+<body>
+
+  <div class="menu-container">
+    <h1>Blocks World</h1>
+    <button id="startBtn">Start Game</button>
+    <button id="instrBtn">Instructions</button>
+  </div>
+
+  <!-- Mode Selection Modal -->
+  <div id="modeModal" class="modal hidden">
+    <div class="modal-content">
+      <h2>Select Game Mode</h2>
+
+      <button onclick="goBasic()">Basic Mode</button>
+      <button onclick="goAdvanced()">Advanced Mode</button>
+      <button onclick="goAI()">AI Mode</button>
+
+      <button onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Instructions Modal -->
+  <div id="instrModal" class="modal hidden">
+    <div class="modal-content instr-modal">
+      <h2>How to Play</h2>
+
+      <div class="instr-section">
+        <h3>🎯 Goal</h3>
+        <p>Rearrange the coloured blocks so that one of the stacks matches the <strong>Goal</strong> pattern shown on the right.</p>
+      </div>
+
+      <div class="instr-section">
+        <h3>🖱️ Moving Blocks</h3>
+        <ul>
+          <li><strong>Click</strong> — Click a top block to select it (it turns red), then click any stack to move it there.</li>
+          <li><strong>Drag &amp; Drop</strong> — Drag a top block and drop it onto a target stack.</li>
+        </ul>
+        <p>Only the <em>top</em> block of each stack can be moved.</p>
+      </div>
+
+      <div class="instr-section">
+        <h3>🕹️ Game Modes</h3>
+        <ul>
+          <li><strong>Basic</strong> — 5 blocks, random start and goal. Just solve the puzzle!</li>
+          <li><strong>Advanced</strong> — You choose the number of blocks and design your own goal layout.</li>
+          <li><strong>AI Mode</strong> — Turn-based battle vs the computer. You move first, then the AI moves. First to reach the goal wins!</li>
+        </ul>
+      </div>
+
+      <div class="instr-section">
+        <h3>💡 Tips</h3>
+        <ul>
+          <li>Use the empty stacks as temporary holding spots.</li>
+          <li>In AI Mode, watch the AI's moves to learn efficient strategies.</li>
+        </ul>
+      </div>
+
+      <button onclick="closeInstr()">Got it!</button>
+    </div>
+  </div>
+
+  <script src="modal.js"></script>
+  <script>
+    function goBasic() {
+      window.location.href = "game.html?mode=basic";
+    }
+
+    function goAdvanced() {
+      window.location.href = "setup.html";
+    }
+
+    function goAI() {
+      window.location.href = "game.html?mode=ai";
+    }
+
+    document.getElementById("instrBtn").addEventListener("click", () => {
+      document.getElementById("instrModal").classList.remove("hidden");
+    });
+
+    function closeInstr() {
+      document.getElementById("instrModal").classList.add("hidden");
+    }
+
+    // 点击遮罩关闭
+    document.getElementById("instrModal").addEventListener("click", (e) => {
+      if (e.target === document.getElementById("instrModal")) closeInstr();
+    });
+  </script>
+
+</body>
+</html>

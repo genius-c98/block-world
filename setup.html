@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced Setup</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <button onclick="window.location.href='index.html'">Back</button>
+    <div class="title">Advanced Setup</div>
+    <div class="actions">
+      <button id="nextBtn">Next</button>
+    </div>
+  </header>
+
+  <main style="padding:20px;max-width:900px;margin:auto;">
+    <h2>Configure Blocks World</h2>
+
+    <div style="margin:12px 0;">
+      <label>Number of blocks (3–8):</label><br/>
+      <input id="nBlocks" type="number" min="3" max="8" value="5" />
+    </div>
+
+    <div id="error" style="color:#b91c1c;font-weight:600;margin-top:10px;"></div>
+  </main>
+
+  <script src="setup.js"></script>
+</body>
+</html>

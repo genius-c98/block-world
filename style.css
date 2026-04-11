@@ -1,0 +1,218 @@
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f7f7f7;
+  color: #111;
+}
+
+.topbar {
+  background: #111;
+  color: #fff;
+  padding: 12px 16px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title { font-weight: 700; }
+
+.stats {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.actions button {
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+  padding: 16px;
+}
+
+.board, .goal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.hint {
+  margin-top: 12px;
+  color: #444;
+  font-size: 13px;
+}
+
+.stacks {
+  display: flex;
+  gap: 18px;
+  padding: 16px 6px;
+  align-items: flex-end;
+}
+
+.stack {
+  width: 90px;
+  min-height: 260px;
+  border: 2px solid #222;
+  border-radius: 10px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column-reverse; /* bottom is visually at bottom */
+  align-items: center;
+  padding: 10px 8px;
+  gap: 8px;
+}
+
+.goalStacks .stack {
+  min-height: 220px;
+  border-style: dashed;
+  opacity: 0.95;
+}
+
+/* ---------- Goal Visual Editor ---------- */
+.pool {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 14px;
+    border: 2px dashed #bbb;
+    border-radius: 12px;
+    min-height: 64px;
+    background: #fff;
+  }
+  
+  .pool .block {
+    cursor: grab;
+  }
+  
+  .drag-over {
+    outline: 3px solid rgba(0,0,0,0.25);
+    outline-offset: 4px;
+  }
+  
+  .block.dragging {
+    opacity: 0.5;
+  }
+
+.block {
+  width: 68px;
+  height: 34px;
+  border: 1px solid #111;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  user-select: none;
+}
+
+.block.top {
+  cursor: pointer;
+}
+
+.block.dim {
+  opacity: 0.55;
+}
+
+.block.selected {
+  outline: 3px solid #e11d48;
+}
+
+/* AI 回合时顶部方块变灰、禁止光标 */
+.block.ai-turn {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.message {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #b91c1c;
+}
+
+.stack.drag-over {
+    outline: 3px dashed #2563eb;
+    outline-offset: 4px;
+}
+  
+.block.dragging {
+    opacity: 0.5;
+}
+
+.hidden { display: none !important; }
+
+/* ---- Main Menu ---- */
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 14px;
+}
+
+.menu-container h1 {
+  font-size: 2.4rem;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.menu-container button {
+  width: 220px;
+  padding: 12px 0;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.menu-container button:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+}
+
+.menu-container #instrBtn {
+  background: #6b7280;
+}
+
+.menu-container #instrBtn:hover {
+  background: #4b5563;
+}
+
+.modal{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-content{
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  width: min(520px, 92vw);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.win-actions{
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
