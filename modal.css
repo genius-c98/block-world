@@ -1,150 +1,164 @@
-/* ============================= */
-/* Modal Overlay */
-/* ============================= */
+/* ============================================================
+   BLOCKS WORLD — Modal System (dark theme)
+   ============================================================ */
 
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    
-    background: rgba(0, 0, 0, 0.55);
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    z-index: 1000;
-    transition: opacity 0.2s ease;
-  }
-  
-  /* Hidden state */
-  .hidden {
-    display: none;
-  }
-  
-  /* ============================= */
-  /* Modal Box */
-  /* ============================= */
-  
-  .modal-content {
-    background: white;
-    padding: 30px 40px;
-    border-radius: 12px;
-    text-align: center;
-    
-    width: 320px;
-    max-width: 90%;
-    
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    
-    animation: modalFade 0.2s ease-out;
-  }
-  
-  /* Title */
-  .modal-content h2 {
-    margin-bottom: 20px;
-    font-weight: 600;
-  }
-  
-  /* Buttons */
-  .modal-content button {
-    width: 100%;
-    padding: 10px 0;
-    margin: 8px 0;
-    
-    border: none;
-    border-radius: 6px;
-    
-    background: #2563eb;
-    color: white;
-    font-size: 14px;
-    cursor: pointer;
-    
-    transition: background 0.2s ease, transform 0.1s ease;
-  }
-  
-  .modal-content button:hover {
-    background: #1d4ed8;
-    transform: translateY(-1px);
-  }
-  
-  .modal-content button:last-child {
-    background: #6b7280;
-  }
-  
-  .modal-content button:last-child:hover {
-    background: #4b5563;
-  }
-  
-  /* Bigger win modal */
-  .win-modal {
-    width: 520px;
-    max-width: 92%;
-    text-align: center;
-  }
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
 
-  /* Instructions modal */
-  .instr-modal {
-    width: 500px;
-    max-width: 92%;
-    text-align: left;
-    max-height: 85vh;
-    overflow-y: auto;
-  }
+.hidden { display: none !important; }
 
-  .instr-modal h2 {
-    text-align: center;
-    margin-bottom: 16px;
-  }
+.modal-content {
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 32px 36px;
+  width: min(460px, 92vw);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+  animation: modalFade 0.2s ease-out;
+}
 
-  .instr-section {
-    margin-bottom: 16px;
-  }
+.modal-content h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 20px;
+  text-align: center;
+  letter-spacing: -0.2px;
+}
 
-  .instr-section h3 {
-    font-size: 15px;
-    margin: 0 0 6px;
-    color: #1e3a8a;
-  }
+.modal-content p {
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 6px;
+  text-align: center;
+}
 
-  .instr-section p,
-  .instr-section li {
-    font-size: 14px;
-    color: #333;
-    line-height: 1.6;
-    margin: 4px 0;
-  }
+.modal-content p span {
+  color: #f1f5f9;
+  font-weight: 700;
+}
 
-  .instr-section ul {
-    padding-left: 18px;
-    margin: 4px 0;
-  }
+/* === Modal buttons === */
+.modal-content button {
+  width: 100%;
+  padding: 11px 0;
+  margin: 7px 0;
+  border: none;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.18s, transform 0.12s;
+  box-shadow: 0 3px 12px rgba(59, 130, 246, 0.3);
+}
+.modal-content button:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
 
-  .win-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 18px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
+/* Last button = cancel / secondary */
+.modal-content button:last-child {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  box-shadow: none;
+}
+.modal-content button:last-child:hover {
+  background: rgba(255, 255, 255, 0.13);
+  color: #e2e8f0;
+}
 
-  .win-actions button {
-    width: auto;
-    min-width: 140px;
-  }
-  /* ============================= */
-  /* Animation */
-  /* ============================= */
-  
-  @keyframes modalFade {
-    from {
-      transform: scale(0.95);
-      opacity: 0;
-    }
-    to {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
+/* === Win modal === */
+.win-modal {
+  width: min(400px, 92vw);
+  text-align: center;
+}
+
+.win-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: center;
+}
+.win-actions button {
+  width: auto;
+  min-width: 130px;
+  flex: 1;
+  margin: 0;
+}
+/* override last-child grey so both win buttons look primary */
+.win-actions button:last-child {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  box-shadow: none;
+}
+.win-actions button:last-child:hover {
+  background: rgba(255, 255, 255, 0.13);
+  color: #e2e8f0;
+}
+
+/* === Instructions modal === */
+.instr-modal {
+  width: min(520px, 92vw);
+  text-align: left;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.instr-modal h2 { text-align: center; }
+
+.instr-section { margin-bottom: 20px; }
+
+.instr-section h3 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #7dd3fc;
+  margin-bottom: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.instr-section p,
+.instr-section li {
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.65;
+  margin: 4px 0;
+}
+
+.instr-section ul {
+  padding-left: 20px;
+  margin: 6px 0;
+}
+
+.instr-section strong { color: #e2e8f0; }
+.instr-section em     { color: #cbd5e1; }
+
+/* single close button at bottom — not last-child grey */
+.instr-modal > button,
+.instr-modal .close-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(59, 130, 246, 0.3);
+  border: none;
+}
+.instr-modal > button:hover,
+.instr-modal .close-btn:hover {
+  opacity: 0.88;
+}
+
+/* === Animation === */
+@keyframes modalFade {
+  from { transform: scale(0.94); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}

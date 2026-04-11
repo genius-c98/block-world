@@ -3,29 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Advanced Setup</title>
+  <title>Configure – Blocks World</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body { display: flex; flex-direction: column; }
+    #nBlocks { display: none; }
+  </style>
 </head>
 <body>
+
   <header class="topbar">
-    <button onclick="window.location.href='index.html'">Back</button>
-    <div class="title">Advanced Setup</div>
+    <button onclick="window.location.href='index.html'">&#8592; Back</button>
+    <div class="title">Game Setup</div>
     <div class="actions">
-      <button id="nextBtn">Next</button>
+      <button id="nextBtn">Continue &#8594;</button>
     </div>
   </header>
 
-  <main style="padding:20px;max-width:900px;margin:auto;">
-    <h2>Configure Blocks World</h2>
+  <main class="setup-main">
+    <div class="setup-card">
+      <h2>Configure Blocks World</h2>
+      <p class="subtitle">Choose how many blocks to play with, then design your goal state.</p>
 
-    <div style="margin:12px 0;">
-      <label>Number of blocks (3–8):</label><br/>
+      <div class="field-label">Number of Blocks</div>
+      <div class="count-picker" id="countPicker"></div>
+
+      <div class="field-label">Block Preview</div>
+      <div class="block-preview" id="blockPreview"></div>
+
+      <div class="error-msg" id="error"></div>
+
+      <!-- kept for setup.js compatibility -->
       <input id="nBlocks" type="number" min="3" max="8" value="5" />
     </div>
-
-    <div id="error" style="color:#b91c1c;font-weight:600;margin-top:10px;"></div>
   </main>
 
+  <script>
+    const COLORS = ["#ef4444","#f97316","#eab308","#22c55e","#3b82f6","#8b5cf6","#ec4899","#14b8a6"];
+    const LABELS = ["A","B","C","D","E","F","G","H"];
+
+    let selected = 5;
+
+    const _picker  = document.getElementById("countPicker");
+    const _preview = document.getElementById("blockPreview");
+    const _nInput  = document.getElementById("nBlocks");
+
+    for (let i = 3; i <= 8; i++) {
+      const btn = document.createElement("button");
+      btn.className = "count-btn" + (i === selected ? " active" : "");
+      btn.textContent = i;
+      btn.dataset.n = i;
+      btn.addEventListener("click", () => selectCount(i));
+      _picker.appendChild(btn);
+    }
+
+    function selectCount(n) {
+      selected = n;
+      _nInput.value = n;
+      document.getElementById("error").textContent = "";
+      _picker.querySelectorAll(".count-btn").forEach(b => {
+        b.classList.toggle("active", Number(b.dataset.n) === n);
+      });
+      renderPreview(n);
+    }
+
+    function renderPreview(n) {
+      const old = _preview.querySelectorAll(".preview-block");
+      old.forEach(b => b.classList.add("fade-out"));
+      setTimeout(() => {
+        _preview.innerHTML = "";
+        for (let i = 0; i < n; i++) {
+          const b = document.createElement("div");
+          b.className = "preview-block";
+          b.style.background = COLORS[i];
+          b.textContent = LABELS[i];
+          _preview.appendChild(b);
+        }
+      }, 180);
+    }
+
+    renderPreview(selected);
+  </script>
   <script src="setup.js"></script>
 </body>
 </html>

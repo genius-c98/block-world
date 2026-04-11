@@ -3,37 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Goal Setup</title>
+  <title>Goal Setup – Blocks World</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="modal.css" />
 </head>
 <body>
+
   <header class="topbar">
-    <button onclick="window.location.href='setup.html'">Back</button>
-    <div class="title">Goal Setup (Visual)</div>
+    <button onclick="window.location.href='setup.html'">&#8592; Back</button>
+    <div class="title">Goal Setup</div>
     <div class="actions">
       <button id="validateBtn">Validate</button>
-      <button id="startBtn">Start</button>
+      <button id="startBtn">Start Game</button>
     </div>
   </header>
 
   <main class="layout">
     <section class="board">
       <h2>Available Blocks</h2>
-      <p style="margin-top:-6px;color:#666;">
-        Drag blocks into any Goal stack. You can move between stacks or drag back here.
-      </p>
+      <p>Drag blocks into any Goal stack. You can move between stacks or drag back here.</p>
       <div id="pool" class="pool" aria-label="block pool"></div>
-
-      <div id="msg" style="margin-top:10px;font-weight:600;"></div>
+      <div id="msg" class="message"></div>
     </section>
 
     <aside class="goal">
       <h2>Goal</h2>
       <div id="goalStacks" class="stacks goalStacks"></div>
-      <p style="color:#666;margin-top:8px;font-size:12px;">
-        Tip: The order in a stack is bottom → top (bottom block is the first one in that stack).
-      </p>
+      <p class="hint">Tip: Stack order is bottom → top (bottom block sits first in each stack).</p>
     </aside>
   </main>
 
