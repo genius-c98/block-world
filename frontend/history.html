@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>History — Blocks World</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* === Page layout === */
+    .history-main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 24px 60px;
+    }
+
+    .history-main h1 {
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+    }
+
+    .history-main .page-subtitle {
+      color: #475569;
+      font-size: 14px;
+      margin-bottom: 36px;
+    }
+
+    /* === Stats grid === */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 14px;
+      padding: 20px 16px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .stat-card .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #7dd3fc;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-card .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+    }
+
+    /* === Leaderboard === */
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      color: #7dd3fc;
+      margin-bottom: 14px;
+    }
+
+    .table-wrap {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead th {
+      padding: 13px 18px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #475569;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    tbody td {
+      padding: 12px 18px;
+      color: #cbd5e1;
+    }
+
+    .rank-cell {
+      font-weight: 700;
+      color: #64748b;
+      width: 48px;
+    }
+
+    tbody tr:nth-child(1) .rank-cell { color: #fbbf24; }
+    tbody tr:nth-child(2) .rank-cell { color: #94a3b8; }
+    tbody tr:nth-child(3) .rank-cell { color: #b45309; }
+
+    .moves-cell {
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .time-cell {
+      color: #7dd3fc;
+    }
+
+    .date-cell {
+      color: #475569;
+      font-size: 13px;
+    }
+
+    /* === Clear button === */
+    .clear-btn {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #f87171;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+    .clear-btn:hover {
+      background: rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
+    }
+
+    /* === Loading / empty states === */
+    .state-msg {
+      text-align: center;
+      padding: 40px 20px;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    /* === Back button === */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 28px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #94a3b8;
+      padding: 9px 18px;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.13);
+      color: #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="history-main">
+    <button class="back-btn" onclick="window.location.href='index.html'">&#8592; Main Menu</button>
+
+    <h1>History</h1>
+    <p class="page-subtitle">All-time stats and leaderboard</p>
+
+    <!-- Stats -->
+    <p class="section-title">Overview</p>
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card"><div class="stat-value" id="s-total">—</div><div class="stat-label">Games Played</div></div>
+      <div class="stat-card"><div class="stat-value" id="s-best-moves">—</div><div class="stat-label">Best Moves</div></div>
+      <div class="stat-card"><div class="stat-value" id="s-best-time">—</div><div class="stat-label">Best Time (s)</div></div>
+      <div class="stat-card"><div class="stat-value" id="s-avg-moves">—</div><div class="stat-label">Avg Moves</div></div>
+      <div class="stat-card"><div class="stat-value" id="s-avg-time">—</div><div class="stat-label">Avg Time (s)</div></div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+      <p class="section-title" style="margin-bottom:0;">Leaderboard</p>
+      <button class="clear-btn" id="clearBtn">Clear All</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Moves</th>
+            <th>Time</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+          <tr><td colspan="4" class="state-msg">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:3000';
+
+    function formatDate(iso) {
+      if (!iso) return '—';
+      const d = new Date(iso);
+      return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+        + ' ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    }
+
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API}/scores/stats`);
+        const s = await res.json();
+        document.getElementById('s-total').textContent     = s.total_games ?? '—';
+        document.getElementById('s-best-moves').textContent = s.best_moves  ?? '—';
+        document.getElementById('s-best-time').textContent  = s.best_time   ?? '—';
+        document.getElementById('s-avg-moves').textContent  = s.avg_moves   ?? '—';
+        document.getElementById('s-avg-time').textContent   = s.avg_time    ?? '—';
+      } catch {
+        ['s-total','s-best-moves','s-best-time','s-avg-moves','s-avg-time']
+          .forEach(id => document.getElementById(id).textContent = 'err');
+      }
+    }
+
+    async function loadLeaderboard() {
+      const tbody = document.getElementById('leaderboardBody');
+      try {
+        const res = await fetch(`${API}/scores?limit=50`);
+        const rows = await res.json();
+        if (!Array.isArray(rows) || !rows.length) {
+          tbody.innerHTML = '<tr><td colspan="4" class="state-msg">No games recorded yet.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = rows.map((r, i) => `
+          <tr>
+            <td class="rank-cell">${i + 1}</td>
+            <td class="moves-cell">${r.moves}</td>
+            <td class="time-cell">${r.time_sec}s</td>
+            <td class="date-cell">${formatDate(r.played_at)}</td>
+          </tr>
+        `).join('');
+      } catch {
+        tbody.innerHTML = '<tr><td colspan="4" class="state-msg">Could not load data. Is the server running?</td></tr>';
+      }
+    }
+
+    document.getElementById('clearBtn').addEventListener('click', async () => {
+      if (!confirm('Clear all history? This cannot be undone.')) return;
+      try {
+        const res = await fetch(`${API}/scores`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.ok) {
+          await loadStats();
+          await loadLeaderboard();
+        }
+      } catch {
+        alert('Failed to clear history. Is the server running?');
+      }
+    });
+
+    loadStats();
+    loadLeaderboard();
+  </script>
+
+</body>
+</html>

@@ -6,6 +6,19 @@
   <title>Blocks World</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="modal.css" />
+  <style>
+    .menu-container #historyBtn {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      color: #94a3b8;
+      box-shadow: none;
+    }
+    .menu-container #historyBtn:hover {
+      background: rgba(255, 255, 255, 0.13);
+      color: #e2e8f0;
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 <body>
 
@@ -14,6 +27,7 @@
     <p class="menu-subtitle">Think ahead. Play smart. Win the game.</p>
     <button id="startBtn">Start Game</button>
     <button id="instrBtn">How to Play</button>
+    <button id="historyBtn">History</button>
   </div>
 
   <!-- Mode Selection Modal -->
@@ -72,6 +86,10 @@
     function goBasic()    { window.location.href = "game.html?mode=basic"; }
     function goAdvanced() { window.location.href = "setup.html"; }
     function goAI()       { window.location.href = "game.html?mode=ai"; }
+
+    document.getElementById("historyBtn").addEventListener("click", () => {
+      window.location.href = "history.html";
+    });
 
     document.getElementById("instrBtn").addEventListener("click", () => {
       document.getElementById("instrModal").classList.remove("hidden");

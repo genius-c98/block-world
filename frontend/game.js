@@ -148,6 +148,15 @@ function arraysEqual(a, b) {
   return true;
 }
 
+// 提交成绩到后端
+function saveScore(moves, time) {
+  fetch('http://localhost:3000/scores', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ moves, time_sec: time })
+  }).catch(err => console.error('Failed to save score:', err));
+}
+
 // 胜利
 function openWinModal(totalSec, winner) {
   if (!winModal) return;
@@ -182,9 +191,12 @@ function checkGoal() {
     ? Math.floor((Date.now() - state.startTimeMs) / 1000)
     : 0;
 
+  const winner = state.turn === "ai" ? "ai" : "human";
+
   // Goal reached
   elStatus.textContent = "Congrats!";
-  openWinModal(totalSec);
+  openWinModal(totalSec, winner);
+  saveScore(state.moves, totalSec);
   return true;
 }
 
