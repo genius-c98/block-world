@@ -1,16 +1,17 @@
-// ai.js - one-step AI (BFS to goal, return first move)
+// BFS-based AI: finds the shortest path to the goal and executes one move per turn
 (function () {
     const BW = window.BW;
     if (!BW) return;
-  
+
     function serialize(stacks) {
       return stacks.map(s => s.join(",")).join("|");
     }
-  
+
     function clone(stacks) {
       return stacks.map(s => [...s]);
     }
-  
+
+    // With 3 stacks there are at most 3×2 = 6 possible moves
     function getAllMoves(stacks) {
       const res = [];
       for (let from = 0; from < stacks.length; from++) {
@@ -22,17 +23,16 @@
       }
       return res;
     }
-  
+
     function applyMove(stacks, mv) {
       const ns = clone(stacks);
       const b = ns[mv.from].pop();
       ns[mv.to].push(b);
       return ns;
     }
-  
+
+    // BFS from start state; returns only the first move of the shortest path
     function bfsNextMove(start, goalStacks, maxNodes = 15000) {
-      // goalStacks 格式是 [["A","B","C"]]（1个非空栈）
-      // 目标：棋盘上任意一个栈与 goalArr 完全一致即算胜利
       const goalArr = goalStacks.find(s => s.length > 0) || [];
 
       function isGoal(stacks) {
@@ -41,25 +41,27 @@
         );
       }
 
-      if (isGoal(start)) return null; // 已经是目标状态
+      if (isGoal(start)) return null;
 
       const startKey = serialize(start);
-      const q = [start];
-      const visited = new Set([startKey]);
-      const parent = new Map(); // key -> { prevKey, move }
+      const q        = [start];
+      const visited  = new Set([startKey]);
+
+      // Maps each state key to { prevKey, move } for path reconstruction
+      const parent = new Map();
       parent.set(startKey, { prevKey: null, move: null });
 
       let nodes = 0;
 
       while (q.length) {
-        const cur = q.shift();
+        const cur    = q.shift();
         const curKey = serialize(cur);
 
         nodes++;
         if (nodes > maxNodes) break;
 
         if (isGoal(cur)) {
-          // 重建第一步
+          // Trace back through parent pointers to reconstruct the path
           let k = curKey;
           const path = [];
           while (true) {
@@ -74,7 +76,7 @@
 
         for (const mv of getAllMoves(cur)) {
           const nxt = applyMove(cur, mv);
-          const nk = serialize(nxt);
+          const nk  = serialize(nxt);
           if (visited.has(nk)) continue;
           visited.add(nk);
           parent.set(nk, { prevKey: curKey, move: mv });
@@ -84,44 +86,37 @@
 
       return null;
     }
-  
+
     function doAIMove() {
       const s = BW.getState();
       if (!s) return;
 
       const mv = bfsNextMove(s.stacks, s.goal);
       if (!mv) {
-        // 无路可走，把回合交还玩家
         s.aiBusy = false;
-        s.turn = "human";
+        s.turn   = "human";
         BW.setStatus("Your turn (AI has no move)");
         BW.renderAll();
         return;
       }
 
-      // 延迟模拟 AI "思考"
       setTimeout(() => {
-        // 临时改为 "human" 才能绕过 tryMove 的回合锁，让 AI 强制执行
+        // tryMove only runs when turn === "human", so temporarily unlock the board
         s.turn = "human";
         BW.tryMove(mv.from, mv.to);
-        s.turn = "ai"; // 改回来，使 checkGoal 能识别胜者
+        s.turn = "ai"; // restore before checkGoal so the winner is identified correctly
 
         BW.renderAll();
-        const won = BW.checkGoal(); // 返回 true 则游戏结束
+        const won = BW.checkGoal();
 
         if (!won) {
-          // 游戏继续，把回合交还玩家
           s.aiBusy = false;
-          s.turn = "human";
+          s.turn   = "human";
           BW.setStatus("Your turn");
           BW.renderAll();
         }
-        // 若 won=true，checkGoal 已经弹出胜利弹窗，不需额外处理
       }, 300);
     }
-  
-    // expose API for game.js
-    window.BW_AI = {
-      requestMove: doAIMove
-    };
+
+    window.BW_AI = { requestMove: doAIMove };
   })();

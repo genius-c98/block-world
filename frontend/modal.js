@@ -1,41 +1,18 @@
-const modal = document.getElementById("modeModal");
+const modal    = document.getElementById("modeModal");
 const startBtn = document.getElementById("startBtn");
 
-// Open modal
-function openModal() {
-  modal.classList.remove("hidden");
-}
+function openModal()  { modal.classList.remove("hidden"); }
+function closeModal() { modal.classList.add("hidden"); }
 
-// Close modal
-function closeModal() {
-  modal.classList.add("hidden");
-}
+function goBasic()    { window.location.href = "game.html?mode=basic"; }
+function goAdvanced() { window.location.href = "setup.html"; }
+function goAI()       { window.location.href = "game.html?mode=ai"; }
 
-// Navigate to Basic
-function goBasic() {
-  window.location.href = "game.html?mode=basic";
-}
+if (startBtn) startBtn.addEventListener("click", openModal);
 
-// Navigate to Advanced
-function goAdvanced() {
-  window.location.href = "setup.html";
-}
-
-// Navigate to AI
-function goAI() {
-  window.location.href = "game.html?mode=ai";
-}
-
-// Button binding
-if (startBtn) {
-  startBtn.addEventListener("click", openModal);
-}
-
-// Close modal when clicking outside content
+// Close when clicking outside the modal content
 if (modal) {
   modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      closeModal();
-    }
+    if (e.target === modal) closeModal();
   });
 }

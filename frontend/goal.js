@@ -1,21 +1,19 @@
 const ADV_KEY = "bw_advanced_config";
 
-const poolEl = document.getElementById("pool");
+const poolEl       = document.getElementById("pool");
 const goalStacksEl = document.getElementById("goalStacks");
-const msgEl = document.getElementById("msg");
-const validateBtn = document.getElementById("validateBtn");
-const startBtn = document.getElementById("startBtn");
+const msgEl        = document.getElementById("msg");
+const validateBtn  = document.getElementById("validateBtn");
+const startBtn     = document.getElementById("startBtn");
 
-// ----- state for editor -----
 let blocksCount = 0;
-let allBlocks = [];            // ["A","B",...]
-let pool = [];                 // blocks not placed yet
-let goalStacks = [[]];         // ONE goal stack only
+let allBlocks   = [];
+let pool        = [];
+let goalStacks  = [[]];
 
-// drag info
-let dragFrom = null; // { area: "pool"|"stack", stackIndex?: number, block: string }
+// { area: "pool"|"stack", stackIndex?: number, block: string }
+let dragFrom = null;
 
-// ---------- helpers ----------
 function setMsg(text, ok = true) {
   if (!msgEl) return;
   msgEl.textContent = text || "";
@@ -44,29 +42,26 @@ function flattenGoal() {
   return goalStacks.flat();
 }
 
+// Returns an error string if invalid, or null if the goal config is valid
 function validateGoal() {
   const placed = flattenGoal();
 
-  // Must place exactly N blocks
   if (placed.length !== blocksCount) {
     return `You must place all ${blocksCount} blocks into Goal stacks. (Placed: ${placed.length})`;
   }
 
-  // No duplicates
   const set = new Set(placed);
   if (set.size !== placed.length) {
     return "Duplicate blocks detected in Goal stack.";
   }
 
-  // Must match exactly A..(N)
   const expected = new Set(allBlocks);
-  for (const b of set) if (!expected.has(b)) return `Invalid block found: ${b}`;
-  for (const b of expected) if (!set.has(b)) return `Missing block in goal: ${b}`;
+  for (const b of set)      if (!expected.has(b)) return `Invalid block found: ${b}`;
+  for (const b of expected) if (!set.has(b))      return `Missing block in goal: ${b}`;
 
-  return null; // OK
+  return null;
 }
 
-// ---------- rendering ----------
 function makeBlockDiv(letter) {
   const div = document.createElement("div");
   div.className = "block top";
@@ -121,16 +116,15 @@ function renderPool() {
 function renderGoalStacks() {
   goalStacksEl.innerHTML = "";
 
-  // only one stack
   const stackDiv = document.createElement("div");
   stackDiv.className = "stack";
 
-  // droppable
   stackDiv.addEventListener("dragover", (e) => {
     e.preventDefault();
     stackDiv.classList.add("drag-over");
   });
   stackDiv.addEventListener("dragleave", () => stackDiv.classList.remove("drag-over"));
+
   stackDiv.addEventListener("drop", (e) => {
     e.preventDefault();
     stackDiv.classList.remove("drag-over");
@@ -146,14 +140,13 @@ function renderAll() {
   renderGoalStacks();
 }
 
-// ---------- drop handlers ----------
 function removeBlockFromPool(b) {
   const idx = pool.indexOf(b);
   if (idx >= 0) pool.splice(idx, 1);
 }
 
 function removeBlockFromStack(stackIndex, b) {
-  const s = goalStacks[stackIndex];
+  const s   = goalStacks[stackIndex];
   const idx = s.indexOf(b);
   if (idx >= 0) s.splice(idx, 1);
 }
@@ -170,8 +163,7 @@ function handleDropToStack(targetStackIndex) {
   }
 
   if (dragFrom.area === "stack") {
-    const from = dragFrom.stackIndex;
-    removeBlockFromStack(from, b);
+    removeBlockFromStack(dragFrom.stackIndex, b);
     goalStacks[targetStackIndex].push(b);
     renderAll();
   }
@@ -186,12 +178,11 @@ function handleDropToPool() {
   if (dragFrom.area === "stack") {
     removeBlockFromStack(dragFrom.stackIndex, b);
     pool.push(b);
-    pool.sort(); // keep ordered A..Z
+    pool.sort();
     renderAll();
   }
 }
 
-// ---------- save ----------
 function saveConfigAndGo() {
   const err = validateGoal();
   if (err) {
@@ -199,16 +190,11 @@ function saveConfigAndGo() {
     return false;
   }
 
-  localStorage.setItem(ADV_KEY, JSON.stringify({
-    blocksCount,
-    goalStacks
-  }));
-
+  localStorage.setItem(ADV_KEY, JSON.stringify({ blocksCount, goalStacks }));
   window.location.href = "game.html?mode=advanced";
   return true;
 }
 
-// ---------- init ----------
 (function init() {
   const step1 = loadStep1();
   if (!step1 || !step1.blocksCount) {
@@ -217,13 +203,10 @@ function saveConfigAndGo() {
   }
 
   blocksCount = step1.blocksCount;
-  allBlocks = generateBlocks(blocksCount);
+  allBlocks   = generateBlocks(blocksCount);
+  pool        = [...allBlocks];
+  goalStacks  = [[]];
 
-  // start with all blocks in pool, goal empty
-  pool = [...allBlocks];
-  goalStacks = [[]];
-
-  // ✅ bind pool drop ONCE (IMPORTANT: avoid duplicate listeners)
   poolEl.addEventListener("dragover", (e) => {
     e.preventDefault();
     poolEl.classList.add("drag-over");
@@ -239,14 +222,10 @@ function saveConfigAndGo() {
   renderAll();
 
   validateBtn.addEventListener("click", () => {
-    console.log("[goal] validate clicked");
     const err = validateGoal();
     if (err) return setMsg(err, false);
     setMsg("✅ Goal configuration valid.", true);
   });
 
-  startBtn.addEventListener("click", () => {
-    console.log("[goal] start clicked");
-    saveConfigAndGo();
-  });
+  startBtn.addEventListener("click", () => saveConfigAndGo());
 })();

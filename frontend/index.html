@@ -37,6 +37,7 @@
       <button onclick="goBasic()">Basic Mode</button>
       <button onclick="goAdvanced()">Advanced Mode</button>
       <button onclick="goAI()">AI Mode</button>
+      <button onclick="goAdversarial()">Adversarial Mode</button>
       <button onclick="closeModal()">Cancel</button>
     </div>
   </div>
@@ -66,6 +67,18 @@
           <li><strong>Basic</strong> — 5 blocks, random start and goal. Just solve the puzzle!</li>
           <li><strong>Advanced</strong> — Choose the number of blocks and design your own goal layout.</li>
           <li><strong>AI Mode</strong> — Turn-based battle vs the computer. First to reach the goal wins!</li>
+          <li><strong>Adversarial Mode</strong> — Race against a Q-Learning AI on the same board with the same goal. Fastest and fewest moves wins!</li>
+        </ul>
+      </div>
+
+      <div class="instr-section">
+        <h3>🤖 Adversarial Mode — How It Works</h3>
+        <ul>
+          <li>Both you and the AI start from the <strong>identical board</strong> and must reach the <strong>same goal</strong>.</li>
+          <li>The AI is powered by <strong>Q-Learning</strong> — a reinforcement learning algorithm that trains itself by playing thousands of random games before the race begins.</li>
+          <li>Both clocks start together the moment training finishes. Move quickly!</li>
+          <li>Winner is decided by <strong>weighted score: moves × 2 + time × 1</strong>. Lower score wins, so fewer moves matter more than speed.</li>
+          <li>Your result is saved to the leaderboard regardless of who wins.</li>
         </ul>
       </div>
 
@@ -74,6 +87,7 @@
         <ul>
           <li>Use empty stacks as temporary holding spots.</li>
           <li>In AI Mode, watch the AI's moves to learn efficient strategies.</li>
+          <li>In Adversarial Mode, prioritise fewer moves over raw speed — moves are weighted twice as heavily as time.</li>
         </ul>
       </div>
 
@@ -83,9 +97,10 @@
 
   <script src="modal.js"></script>
   <script>
-    function goBasic()    { window.location.href = "game.html?mode=basic"; }
-    function goAdvanced() { window.location.href = "setup.html"; }
-    function goAI()       { window.location.href = "game.html?mode=ai"; }
+    function goBasic()        { window.location.href = "game.html?mode=basic"; }
+    function goAdvanced()     { window.location.href = "setup.html"; }
+    function goAI()           { window.location.href = "game.html?mode=ai"; }
+    function goAdversarial()  { window.location.href = "adversarial.html"; }
 
     document.getElementById("historyBtn").addEventListener("click", () => {
       window.location.href = "history.html";

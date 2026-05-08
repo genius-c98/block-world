@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Adversarial – Blocks World</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="modal.css" />
+  <style>
+    /* ── Status bar ── */
+    .adv-status {
+      text-align: center;
+      padding: 8px 16px;
+      font-size: 0.92rem;
+      opacity: 0.75;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── Three-column race layout ── */
+    .race-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 0;
+      padding: 16px 8px 32px;
+      flex-wrap: wrap;
+    }
+
+    .race-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 0 24px;
+      min-width: 180px;
+      flex: 1;
+      max-width: 280px;
+    }
+
+    .panel-divider {
+      width: 1px;
+      align-self: stretch;
+      margin-top: 40px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .panel-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .panel-stats {
+      display: flex;
+      gap: 18px;
+      font-size: 0.88rem;
+      opacity: 0.75;
+    }
+
+    .panel-score {
+      font-size: 0.8rem;
+      opacity: 0.5;
+      min-height: 1.2em;
+    }
+
+    .score-formula {
+      font-size: 0.78rem;
+      opacity: 0.4;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    /* ── Result modal extras ── */
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0 8px;
+      text-align: center;
+    }
+
+    .result-cell {
+      line-height: 1.9;
+      padding: 8px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .result-cell.winner {
+      background: rgba(99, 102, 241, 0.18);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+    }
+
+    .score-note {
+      font-size: 0.76rem;
+      opacity: 0.45;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <button onclick="window.location.href='index.html'">&#8592; Back</button>
+    <div class="title">Adversarial</div>
+    <div class="actions">
+      <button id="restartBtn">Restart</button>
+    </div>
+  </header>
+
+  <div class="adv-status" id="statusBar">Training AI (Q-Learning)...</div>
+
+  <main class="race-wrap">
+
+    <!-- Human panel -->
+    <div class="race-panel">
+      <div class="panel-title">You</div>
+      <div id="humanBoard" class="stacks"></div>
+      <div class="panel-stats">
+        <span>Moves&nbsp;<strong id="humanMoves">0</strong></span>
+        <span>Time&nbsp;<strong id="humanTime">0</strong>s</span>
+      </div>
+      <div class="panel-score" id="humanScore"></div>
+    </div>
+
+    <div class="panel-divider"></div>
+
+    <!-- Shared goal panel -->
+    <div class="race-panel">
+      <div class="panel-title">Goal</div>
+      <div id="goalDisplay" class="stacks goalStacks"></div>
+      <div class="score-formula">
+        Score&nbsp;=&nbsp;moves&nbsp;&times;&nbsp;2&nbsp;+&nbsp;time&nbsp;&times;&nbsp;1<br/>
+        (lower&nbsp;is&nbsp;better)
+      </div>
+    </div>
+
+    <div class="panel-divider"></div>
+
+    <!-- AI panel -->
+    <div class="race-panel">
+      <div class="panel-title">AI &nbsp;<small style="font-size:0.65em;opacity:0.55">(Q-Learning)</small></div>
+      <div id="aiBoard" class="stacks"></div>
+      <div class="panel-stats">
+        <span>Moves&nbsp;<strong id="aiMoves">0</strong></span>
+        <span>Time&nbsp;<strong id="aiTime">0</strong>s</span>
+      </div>
+      <div class="panel-score" id="aiScore"></div>
+    </div>
+
+  </main>
+
+  <!-- Result Modal -->
+  <div id="resultModal" class="modal hidden">
+    <div class="modal-content win-modal">
+      <h2 id="resultTitle">Result</h2>
+      <div class="result-grid">
+        <div class="result-cell" id="humanCell">
+          <div><strong>You</strong></div>
+          <div>Moves: <span id="rHumanMoves">–</span></div>
+          <div>Time: <span id="rHumanTime">–</span>s</div>
+          <div>Score: <span id="rHumanScore">–</span></div>
+        </div>
+        <div class="result-cell" id="aiCell">
+          <div><strong>AI</strong></div>
+          <div>Moves: <span id="rAIMoves">–</span></div>
+          <div>Time: <span id="rAITime">–</span>s</div>
+          <div>Score: <span id="rAIScore">–</span></div>
+        </div>
+      </div>
+      <p class="score-note">Score = moves × 2 + time × 1 &nbsp;|&nbsp; lower wins</p>
+      <div class="win-actions">
+        <button id="playAgainBtn">Play Again</button>
+        <button id="menuBtn">Main Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="ai_ql.js"></script>
+  <script src="adversarial.js"></script>
+</body>
+</html>
